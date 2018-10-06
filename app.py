@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 POSTGRES = {
     'user': 'postgres',
-    'pw': 'Gabi9332',
+    'pw': 'ResumeBuilderDB',
     'db': 'resume_db',
     'host': 'localhost',
     'port': '5432',
