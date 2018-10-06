@@ -11,8 +11,8 @@ class Experience(db.Model):
     proposition1 = db.Column(db.String(300))
     proposition2 = db.Column(db.String(300), nullable=True)
     proposition3 = db.Column(db.String(300), nullable=True)
-    date = db.Column(db.String(10))
-    roll = db.Column(db.String(60))
+    date = db.Column(db.DateTime)
+    role = db.Column(db.String(60))
     host = db.Column(db.String(100))    # employer
 
     def __repr__(self):
@@ -22,10 +22,9 @@ class Experience(db.Model):
             for column, value in self._to_dict().items()
         })
 
-    tags = db.relationship('Tag', secondary=experiencetag,
-                           backref=db.backref('experienceTags', lazy='dynamic'))
+    tags = db.relationship('Tag', secondary="experiencetag", backref='experiences')
 
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    tag = db.column(db.String(40))
+    name = db.column(db.String(40))
