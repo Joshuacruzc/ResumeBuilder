@@ -4,7 +4,7 @@ from models import db
 app = Flask(__name__)
 
 POSTGRES = {
-    'user': 'postgres',
+    'user': 'resume_user',
     'pw': 'ResumeBuilderDB',
     'db': 'resume_db',
     'host': 'localhost',
