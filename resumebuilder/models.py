@@ -20,6 +20,7 @@ class Experience(db.Model):
     date = db.Column(db.DateTime)
     role = db.Column(db.String(60))
     host = db.Column(db.String(100))    # employer
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         """Define a base way to print models"""
@@ -29,6 +30,7 @@ class Experience(db.Model):
         })
 
     tags = db.relationship('Tag', secondary="experience_tag", backref='experiences')
+
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +43,7 @@ class User(db.Model, UserMixin):
     email = db.Column( db.String(50), unique=True)
     profile_picture = db.Column(db.String(120), nullable = False, default = 'default.jpg')
     registered_on = db.Column(db.DateTime, nullable= False, default=datetime.utcnow)
+    experiences = db.relationship('Experience', backref='user', lazy=True)
 
     def __repr__(self):
         return f"User('{self.name}')"
