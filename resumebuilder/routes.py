@@ -1,5 +1,6 @@
 from flask import url_for, redirect, flash, render_template
 from flask_login import current_user, login_user, logout_user
+
 from resumebuilder import app, db, bcrypt
 from resumebuilder.forms import RegistrationForm, LoginForm, ExperienceForm
 from resumebuilder.models import User, Experience, Tag
@@ -9,7 +10,7 @@ from resumebuilder.models import User, Experience, Tag
 def index():
     return render_template('index.html')
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
