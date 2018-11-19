@@ -1,12 +1,12 @@
 from flask import url_for, redirect, flash, render_template
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 
 from resumebuilder import app, db, bcrypt
 from resumebuilder.forms import RegistrationForm, LoginForm, ExperienceForm
 from resumebuilder.models import User, Experience, Tag
 
 
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
 
@@ -42,12 +42,14 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 
 @app.route('/ExperienceRegistration', methods=['GET', 'POST'])
+@login_required
 def registerExperience():
     form = ExperienceForm()
 
