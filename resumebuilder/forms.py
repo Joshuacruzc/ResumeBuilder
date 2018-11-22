@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 from resumebuilder.models import User
@@ -26,9 +26,20 @@ class LoginForm(FlaskForm):
                              validators=[DataRequired(), Length(min=8)])
     submit = SubmitField('Login')
 
-# class Experience(FlaskForm):
-#     host = StringField('Host Name',
-#                            validators=[DataRequired(), Length(min=3, max=50), ])
-#     playlist = StringField('Playlist Name',
-#                            validators=[DataRequired(), Length(min=3, max=50), ])
-#     submit = SubmitField('Create Playlist')
+
+class ExperienceForm(FlaskForm):
+    proposition1 = StringField('Experience Summary',
+                           validators=[DataRequired(), Length(min=3, max=300), ])
+    proposition2 = StringField('Experience Summary (Optional)',
+                           validators=[Length(min=0, max=300), ])
+    proposition3 = StringField('Extra Details (Optional)',
+                               validators=[Length(min=0, max=300), ])
+    host = StringField('Host Name',
+                           validators=[DataRequired(), Length(min=3, max=100), ])
+    role = StringField('Role',
+                       validators=[DataRequired(), Length(min=3, max=60), ])
+    date = DateField('Start Date', format='%m/%d/%Y', validators=[DataRequired(),])
+
+    tags = StringField('Experience tags', validators=[DataRequired(),])
+
+    submit = SubmitField('Submit Experience')

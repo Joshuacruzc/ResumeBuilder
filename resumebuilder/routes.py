@@ -1,8 +1,9 @@
 from flask import url_for, redirect, flash, render_template
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
+
 from resumebuilder import app, db, bcrypt
-from resumebuilder.forms import RegistrationForm, LoginForm
-from resumebuilder.models import User
+from resumebuilder.forms import RegistrationForm, LoginForm, ExperienceForm
+from resumebuilder.models import User, Experience, Tag
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -41,6 +42,35 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/ExperienceRegistration', methods=['GET', 'POST'])
+@login_required
+def registerExperience():
+    form = ExperienceForm()
+
+    if form.validate_on_submit():
+        experience = Experience(proposition1=form.proposition1.data, proposition2=form.proposition2.data, proposition3=
+        form.proposition3.data, date=form.date.data, role=form.role.data, host=form.host.data, user_id=current_user.id)
+        db.session.add(experience)
+
+        experience_tags = form.tags.data.split()
+        tags_qs = Tag.query.all()
+        db_tags = [tag.name for tag in tags_qs]
+        for tag in experience_tags:
+            if tag not in db_tags:
+                temp_Tag = Tag(name=tag)
+                db.session.add(temp_Tag)
+            else:
+                temp_Tag = list(filter(lambda x: x.name == tag, tags_qs))[0]
+            experience.tags.append(temp_Tag)
+
+        db.session.commit()
+        flash("Your experience has been registered successfully", 'success')
+        return redirect(url_for('index'))
+
+    return render_template('register_experiences.html', title='Register Experience', form=form)
